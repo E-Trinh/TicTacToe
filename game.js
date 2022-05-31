@@ -8,15 +8,22 @@ const playerFactory = (name, character) => {
 const gameBoard = (function() {
     "use strict";
     const board = Array(9).fill("");
+    const disabled = false;
 
     const get = index => {
         return board[index];
-    }
+    };
 
     const place = (character, index) => {
-        board[index] = character; 
-        return checkWin();
-    }
+        if (!disabled) {
+            board[index] = character; 
+            if (checkWin()) {
+                return "win";
+            } else {
+                checkTie() ? "tie" : false;
+            }
+        }
+    };
 
     const checkWin = () => {
         if (board[0] === board[1] && board[1] === board[2] && board[0] != "") {
@@ -38,11 +45,21 @@ const gameBoard = (function() {
         } else {
             return false;
         }
-    }
+    };
+
+    const checkTie = () => {
+        for (let i = 0; i < 9; i++) {
+            if (board[0] === "") {
+                return false;
+            }
+        }
+        return true;
+    };
     
     return {
+        disabled,
         place,
-        get
+        get,
     }
 })();
 
@@ -58,16 +75,27 @@ const displayController = (function() {
             });
         }
         return display;
-    }
-
-    const place = (character, index) => {
-        boardDisplay[index].textContent = character;
-    }
+    };
 
     const boardDisplay = getDisplay();
 
+    const place = (character, index) => {
+        boardDisplay[index].textContent = character;
+    };
+
+
+    const displayWinner = name => {
+        alert(name + " has won!");
+    };
+
+    const displayTie = () => {
+        alert("Game has tied.");
+    }
+
     return {
         place,
+        displayWinner,
+        displayTie,
     }
 })();
 
@@ -79,12 +107,19 @@ const gameplayController = (function() {
 
 
     const userClick = (index) => {
-        if (gameBoard.get(index) == "") {
+        if (gameBoard.get(index) == "" && !gameBoard.disabled) {
             const result = gameBoard.place(playerTurn.character, index);
             displayController.place(playerTurn.character, index);
+            if (result === "win") {
+                displayController.displayWinner(playerTurn.name);
+                gameBoard.disabled = true;
+            } else if (result === "tie") {
+                displayController.displayTie();
+                gameBoard.disabled = true;
+            }
             playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
         }
-    }
+    };
 
     return {
         userClick,
