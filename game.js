@@ -58,9 +58,11 @@ const gameplayController = (function() {
 
 
     const userClick = (index) => {
-        gameBoard.place(playerTurn.character, index);
-        displayController.place(playerTurn.character, index);
-        playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
+        if (gameBoard.get(index) == "") {
+            gameBoard.place(playerTurn.character, index);
+            displayController.place(playerTurn.character, index);
+            playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
+        }
     }
 
     return {
