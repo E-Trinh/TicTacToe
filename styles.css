@@ -1,3 +1,9 @@
+:root {
+    --main-bg-color: #F1F5F9;
+    --container-bg-color: #CBD5E1;
+    --container-contrast-color: #0F172A;
+}
+
 * {
     padding: 0px;
     margin: 0px;
@@ -13,18 +19,81 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--main-bg-color);
+    overflow-y: auto;
+}
+
+.info-container {
+    background-color: var(--container-bg-color);
+    color: var(--container-contrast-color);
+    border: 1px solid var(--container-contrast-color);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    height: 30vw;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-right: 3%;
+    font-size: 1.5rem;
+}
+
+.info-container input {
+    border: none;
+    border-bottom: 2px solid var(--container-contrast-color);
+    opacity: 40%;
+    background-color: transparent;
+    padding-bottom: 0px;
+    color: var(--container-contrast-color);
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.info-container > input:focus {
+    outline: none;
+    opacity: 100%;
+}
+
+.info-container > input:active {
+    outline: none;
+    opacity: 100%;
+}
+
+.info-container button {
+    font-size: 2rem;
+    background-color: var(--container-contrast-color);
+    color: var(--container-bg-color);
+    box-shadow: 0px 0px 5px #101010;
+    transition: background-color 1s;
+    width: 75%;
+    border-radius: 30px;;
+    border: none;
+    margin-top: 3%;
+}
+
+.info-container button:hover {
+    background-color: var(--container-bg-color);
+    color: var(--container-color-color);
+}
+
+#message {
+    margin-top: 3%;
 }
 
 .board {
-    height: 600px;
-    width: 600px;
+    height: 30vw;
+    width: 30vw;
     display: grid;
-    grid-template-columns: repeat(3, 200px);
-    grid-template-rows: repeat(3, 200px);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    background-color: var(--container-bg-color);
 }
 
 .box {
-    width: 200px;
-    height: 200px;
-    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--container-contrast-color);
+    background-color: var(--container-bg-color);
 }
