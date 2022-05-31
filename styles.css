@@ -40,6 +40,15 @@ html, body {
     font-size: 1.5rem;
 }
 
+.info-container a {
+    text-decoration: none;
+    color: var(--container-contrast-color);
+}
+
+.info-container a:hover {
+    text-decoration: underline;
+}
+
 .info-container input {
     border: none;
     border-bottom: 2px solid var(--container-contrast-color);
@@ -96,4 +105,24 @@ html, body {
     height: 100%;
     border: 1px solid var(--container-contrast-color);
     background-color: var(--container-bg-color);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+
+@media (max-width: 480px) or (orientation:portrait) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .info-container {
+        height: auto;
+        margin: 0px;
+        margin-bottom: 3%;
+    }
+
+    .board {
+        height: 30vh;
+        width: 30vh;
+    }
 }

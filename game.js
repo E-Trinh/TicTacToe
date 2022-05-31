@@ -109,7 +109,11 @@ const displayController = (function() {
 
     //fills in the board in the HTML document with the character given at the index
     const place = (character, index) => {
-        boardDisplay[index].textContent = character;
+        if (character === "X") {
+            boardDisplay[index].style.backgroundImage = "url('./resource/x.svg')";
+        } else {
+            boardDisplay[index].style.backgroundImage = "url('./resource/o.svg')";
+        }
     };
 
     //displays the name of the winner
@@ -125,7 +129,7 @@ const displayController = (function() {
     //empties the HTML board
     const reset = () => {
         for (let i = 0; i < 9; i++) {
-            boardDisplay[i].textContent = "";
+            boardDisplay[i].style.backgroundImage = "";
         }
         document.getElementById("message").textContent = "Game Reset"
     };
