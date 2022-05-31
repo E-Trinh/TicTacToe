@@ -59,10 +59,17 @@ const gameBoard = (function() {
         return true;
     };
     
+    const reset = () => {
+        for (let i = 0; i < 9; i++) {
+            board[i] = "";
+        }
+    }
+
     return {
         disabled,
         place,
         get,
+        reset,
     }
 })();
 
@@ -100,11 +107,18 @@ const displayController = (function() {
     };
 
     const displayWinner = name => {
-        alert(name + " has won!");
+        document.getElementById("message").textContent = name + " has Won!"
     };
 
     const displayTie = () => {
-        alert("Game has tied.");
+        document.getElementById("message").textContent = "Game has Tied!"
+    }
+
+    const reset = () => {
+        for (let i = 0; i < 9; i++) {
+            boardDisplay[i].textContent = "";
+        }
+        document.getElementById("message").textContent = "Game Reset"
     }
 
     const getPlayerOneName = () => {
@@ -119,6 +133,7 @@ const displayController = (function() {
         place,
         displayWinner,
         displayTie,
+        reset,
         getPlayerOneName,
         getPlayerTwoName,
     }
@@ -152,7 +167,8 @@ const gameplayController = (function() {
     }
 
     const reset = () => {
-
+        gameBoard.reset();
+        displayController.reset();
     }
 
     return {
