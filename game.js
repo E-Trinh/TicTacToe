@@ -32,9 +32,7 @@ const displayController = (function() {
             display.push(document.querySelector("#box-" + i));
             display[i].dataset.index = i;
             display[i].addEventListener("click", (event) => {
-                if (gameBoard.get(event.target.dataset.index) === "") {
-                    display[i].textContent = "X";
-                }
+                gameplayController.userClick(event.target.dataset.index);
             });
         }
         return display;
@@ -56,8 +54,16 @@ const gameplayController = (function() {
     "use strict"
     const playerOne = playerFactory("One", "X");
     const playerTwo = playerFactory("Two", "O");
+    let playerTurn = playerOne;
+
+
+    const userClick = (index) => {
+        gameBoard.place(playerTurn.character, index);
+        displayController.place(playerTurn.character, index);
+        playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
+    }
 
     return {
-
+        userClick,
     }
 })();
