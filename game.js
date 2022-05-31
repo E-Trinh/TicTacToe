@@ -1,3 +1,4 @@
+//Player factory
 const playerFactory = (name, character) => {
     return {
         name,
@@ -5,6 +6,8 @@ const playerFactory = (name, character) => {
     };
 };
 
+
+//gameBoard module, keeps track and manages the board logic
 const gameBoard = (function() {
     "use strict";
     const board = Array(9).fill("");
@@ -63,6 +66,7 @@ const gameBoard = (function() {
     }
 })();
 
+//displayController module, handles all DOM for the web page
 const displayController = (function() {
     "use strict";
     const getDisplay = () => {
@@ -77,12 +81,23 @@ const displayController = (function() {
         return display;
     };
 
+    const setupInfo = () => {
+        document.getElementById("play").addEventListener("click", () => {
+            gameplayController.play();
+        });
+        document.getElementById("reset").addEventListener("click", () => {
+            gameplayController.reset();
+        })
+    }
+
     const boardDisplay = getDisplay();
+    setupInfo();
+    const playerOneNameBox = document.getElementById("player-one");
+    const playerTwoNameBox = document.getElementById("player-two");
 
     const place = (character, index) => {
         boardDisplay[index].textContent = character;
     };
-
 
     const displayWinner = name => {
         alert(name + " has won!");
@@ -92,19 +107,29 @@ const displayController = (function() {
         alert("Game has tied.");
     }
 
+    const getPlayerOneName = () => {
+        return document.getElementById("player-one").value;
+    }
+
+    const getPlayerTwoName = () => {
+        return document.getElementById("player-two").value;
+    }
+
     return {
         place,
         displayWinner,
         displayTie,
+        getPlayerOneName,
+        getPlayerTwoName,
     }
 })();
 
+//gameplayController module, handles the flow of the game
 const gameplayController = (function() {
     "use strict"
-    const playerOne = playerFactory("One", "X");
-    const playerTwo = playerFactory("Two", "O");
+    let playerOne = playerFactory("Player One", "X");
+    let playerTwo = playerFactory("Player Two", "O");
     let playerTurn = playerOne;
-
 
     const userClick = (index) => {
         if (gameBoard.get(index) == "" && !gameBoard.disabled) {
@@ -121,7 +146,18 @@ const gameplayController = (function() {
         }
     };
 
+    const play = () => {
+        playerOne.name = displayController.getPlayerOneName();
+        playerTwo.name = displayController.getPlayerTwoName();
+    }
+
+    const reset = () => {
+
+    }
+
     return {
         userClick,
+        play,
+        reset
     }
 })();
