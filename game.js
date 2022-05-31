@@ -24,7 +24,7 @@ const gameBoard = (function() {
         if (checkWin()) {
             return "win";
         } else {
-            checkTie() ? "tie" : false;
+            return checkTie() ? "tie" : false;
         }
     };
 
@@ -54,7 +54,7 @@ const gameBoard = (function() {
     //check if there is a tie
     const checkTie = () => {
         for (let i = 0; i < 9; i++) {
-            if (board[0] === "") {
+            if (get(i) === "") {
                 return false;
             }
         }
@@ -130,6 +130,7 @@ const displayController = (function() {
         document.getElementById("message").textContent = "Game Reset"
     };
 
+    //displays the turn of the name parameter
     const showTurn = name => {
         document.getElementById("message").textContent = name + " turn! Select a box!";
     };
@@ -180,12 +181,11 @@ const gameplayController = (function() {
         }
     };
 
-    //sets the two players name and enables the board
+    //sets the two players name and resets the board
     const play = () => {
         playerOne.name = displayController.getPlayerOneName();
         playerTwo.name = displayController.getPlayerTwoName();
-        gameBoard.disabled = false;
-        displayController.showTurn(playerTurn.name);
+        reset();
     }
 
     //resets both the javascript board and the HTML board
