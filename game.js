@@ -11,23 +11,24 @@ const playerFactory = (name, character) => {
 const gameBoard = (function() {
     "use strict";
     const board = Array(9).fill("");
-    const disabled = false;
+    const disabled = true;
 
+    //gets the string stored in the board at the given index
     const get = index => {
         return board[index];
     };
 
+    //fills in the board with a character at the specified index
     const place = (character, index) => {
-        if (!disabled) {
-            board[index] = character; 
-            if (checkWin()) {
-                return "win";
-            } else {
-                checkTie() ? "tie" : false;
-            }
+        board[index] = character; 
+        if (checkWin()) {
+            return "win";
+        } else {
+            checkTie() ? "tie" : false;
         }
     };
 
+    //checks if the current player has won
     const checkWin = () => {
         if (board[0] === board[1] && board[1] === board[2] && board[0] != "") {
             return true;
@@ -50,6 +51,7 @@ const gameBoard = (function() {
         }
     };
 
+    //check if there is a tie
     const checkTie = () => {
         for (let i = 0; i < 9; i++) {
             if (board[0] === "") {
@@ -59,6 +61,7 @@ const gameBoard = (function() {
         return true;
     };
     
+    //empties the board
     const reset = () => {
         for (let i = 0; i < 9; i++) {
             board[i] = "";
@@ -76,6 +79,7 @@ const gameBoard = (function() {
 //displayController module, handles all DOM for the web page
 const displayController = (function() {
     "use strict";
+    //used for intializing the boardDisplay variable, gets a pointer to each box
     const getDisplay = () => {
         const display = []
         for (let i = 0; i < 9; i++) {
@@ -88,6 +92,7 @@ const displayController = (function() {
         return display;
     };
 
+    //used for giving the two controls button event listeners
     const setupInfo = () => {
         document.getElementById("play").addEventListener("click", () => {
             gameplayController.play();
@@ -102,38 +107,49 @@ const displayController = (function() {
     const playerOneNameBox = document.getElementById("player-one");
     const playerTwoNameBox = document.getElementById("player-two");
 
+    //fills in the board in the HTML document with the character given at the index
     const place = (character, index) => {
         boardDisplay[index].textContent = character;
     };
 
+    //displays the name of the winner
     const displayWinner = name => {
         document.getElementById("message").textContent = name + " has Won!"
     };
 
+    //displays that the game has tied
     const displayTie = () => {
         document.getElementById("message").textContent = "Game has Tied!"
-    }
+    };
 
+    //empties the HTML board
     const reset = () => {
         for (let i = 0; i < 9; i++) {
             boardDisplay[i].textContent = "";
         }
         document.getElementById("message").textContent = "Game Reset"
-    }
+    };
 
+    const showTurn = name => {
+        document.getElementById("message").textContent = name + " turn! Select a box!";
+    };
+
+    //gets the name the user inputted in the HTML input
     const getPlayerOneName = () => {
         return document.getElementById("player-one").value;
-    }
+    };
 
+    //gets the name the user inputted in the HTML input
     const getPlayerTwoName = () => {
         return document.getElementById("player-two").value;
-    }
+    }; 
 
     return {
         place,
         displayWinner,
         displayTie,
         reset,
+        showTurn,
         getPlayerOneName,
         getPlayerTwoName,
     }
@@ -146,6 +162,7 @@ const gameplayController = (function() {
     let playerTwo = playerFactory("Player Two", "O");
     let playerTurn = playerOne;
 
+    //places a mark on board, checks win and tie conditions, and alternates the player turn
     const userClick = (index) => {
         if (gameBoard.get(index) == "" && !gameBoard.disabled) {
             const result = gameBoard.place(playerTurn.character, index);
@@ -156,19 +173,27 @@ const gameplayController = (function() {
             } else if (result === "tie") {
                 displayController.displayTie();
                 gameBoard.disabled = true;
+            } else {
+                playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
+                displayController.showTurn(playerTurn.name);
             }
-            playerTurn = playerTurn == playerOne ? playerTwo : playerOne;
         }
     };
 
+    //sets the two players name and enables the board
     const play = () => {
         playerOne.name = displayController.getPlayerOneName();
         playerTwo.name = displayController.getPlayerTwoName();
+        gameBoard.disabled = false;
+        displayController.showTurn(playerTurn.name);
     }
 
+    //resets both the javascript board and the HTML board
     const reset = () => {
         gameBoard.reset();
         displayController.reset();
+        gameBoard.disabled = false;
+        displayController.showTurn(playerTurn.name);
     }
 
     return {
